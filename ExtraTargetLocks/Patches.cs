@@ -21,7 +21,7 @@ namespace ExtraTargetLocks
             static void Patch(TacticalLock __instance)
             {
                 CurrentUsedTacticalLock = __instance;
-                __instance.LockLimit = BepinPlugin.Bindings.CachedCurrentMaxTargetLocks;
+                __instance.LockLimit = BepinPlugin.Bindings.CachedMaxTargetLocks;
             }
         }
 
@@ -79,7 +79,7 @@ namespace ExtraTargetLocks
                     if (CI.opcode == OpCodes.Ldc_I4_7)
                     {
                         CI.opcode = OpCodes.Ldsfld;
-                        CI.operand = AccessTools.Field(typeof(BepinPlugin.Bindings), "CachedCurrentMaxTargetLocks");
+                        CI.operand = AccessTools.Field(typeof(BepinPlugin.Bindings), "CachedMaxTargetLocks");
                         break;
                     }
                 }
