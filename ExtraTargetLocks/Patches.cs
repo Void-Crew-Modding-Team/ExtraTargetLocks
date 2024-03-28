@@ -3,7 +3,9 @@ using Gameplay.TacticalTargeting;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using static VoidManager.Utilities.HarmonyHelpers;
 
 namespace ExtraTargetLocks
@@ -24,7 +26,7 @@ namespace ExtraTargetLocks
         }
 
 
-        static IEnumerable<CodeInstruction> Patch26(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> Patchout7(IEnumerable<CodeInstruction> instructions, [CallerMemberName] string callerName = "")
         {
             CodeInstruction[] instructionsArray = instructions.ToArray();
             bool found = false;
@@ -33,14 +35,14 @@ namespace ExtraTargetLocks
                 if (instructionsArray[i].opcode == OpCodes.Ldc_I4_7)
                 {
                     instructionsArray[i].opcode = OpCodes.Ldc_I4;
-                    instructionsArray[i].operand = BepinPlugin.Bindings.AbsoluteMaxTargetLocks.Value;
+                    instructionsArray[i].operand = BepinPlugin.Bindings.AbsoluteMaxTargetLocks;
                     found = true;
                     break;
                 }
             }
             if (!found)
             {
-                BepinPlugin.Log.LogError("Patch26() failed to find and patch target sequence.");
+                BepinPlugin.Log.LogError("Patchout7() failed to find and patch target sequence for patch: " + callerName);
             }
             return instructionsArray;
         }
@@ -48,25 +50,10 @@ namespace ExtraTargetLocks
         [HarmonyPatch(typeof(TargetLockComponent), MethodType.Constructor)]
         internal class TLCConstructorPatch
         {
-            //static FieldInfo TargetLocksFI = AccessTools.Field(typeof(TargetLock), "TargetLocks");
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                bool found = false;
-                foreach (CodeInstruction CI in instructions)
-                {
-                    if (CI.opcode == OpCodes.Ldc_I4_7)
-                    {
-                        CI.opcode = OpCodes.Ldc_I4;
-                        CI.operand = 26;
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    BepinPlugin.Log.LogError("TargetLockComponent Constructor Transpiler failed to find and patch target sequence.");
-                }
-                return instructions;
+                return Patchout7(instructions);
             }
         }
 
@@ -76,7 +63,7 @@ namespace ExtraTargetLocks
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                return Patch26(instructions);
+                return Patchout7(instructions);
             }
         }
 
@@ -86,7 +73,22 @@ namespace ExtraTargetLocks
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                return Patch26(instructions);
+                bool found = false;
+                foreach (CodeInstruction CI in instructions)
+                {
+                    if (CI.opcode == OpCodes.Ldc_I4_7)
+                    {
+                        CI.opcode = OpCodes.Ldsfld;
+                        CI.operand = AccessTools.Field(typeof(BepinPlugin.Bindings), "CachedCurrentMaxTargetLocks");
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    BepinPlugin.Log.LogError("TargetLockComponent OnPhotonSerializeView Transpiler failed to find and patch target sequence.");
+                }
+                return instructions;
+                //return Patchout7(instructions);
             }
         }
 
@@ -96,7 +98,7 @@ namespace ExtraTargetLocks
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                return Patch26(instructions);
+                return Patchout7(instructions);
             }
         }
 
@@ -106,7 +108,7 @@ namespace ExtraTargetLocks
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                return Patch26(Patch26(instructions));
+                return Patchout7(Patchout7(instructions));
             }
         }
 
@@ -116,7 +118,7 @@ namespace ExtraTargetLocks
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                return Patch26(Patch26(instructions));
+                return Patchout7(Patchout7(instructions));
             }
         }
         [HarmonyPatch(typeof(TargetLockComponent), "TryClearAll")]
@@ -125,7 +127,7 @@ namespace ExtraTargetLocks
             [HarmonyTranspiler]
             static IEnumerable<CodeInstruction> Patch(IEnumerable<CodeInstruction> instructions)
             {
-                return Patch26(instructions);
+                return Patchout7(instructions);
             }
         }
     }
