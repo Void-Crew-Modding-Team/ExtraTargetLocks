@@ -21,6 +21,6 @@ namespace ExtraTargetLocks
 
         public override string Author => "Dragon";
 
-        public override string Description => "Increases max target locks.";
+        public override string Description => "Increases max target locks. All must have.";
     }
 }

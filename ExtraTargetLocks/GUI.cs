@@ -31,6 +31,10 @@ namespace ExtraTargetLocks
                 {
                     BepinPlugin.Bindings.CachedMaxTargetLocks = value;
                     BepinPlugin.Bindings.MaxTargetLocks.Value = value;
+                    if(Patches.CurrentUsedTacticalLock != null)
+                    {
+                        Patches.CurrentUsedTacticalLock.LockLimit = value;
+                    }
                     UpdateCurrentMTLMessage.Instance.SendToOthers();
                 }
             }
