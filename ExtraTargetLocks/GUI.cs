@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using VoidManager.CustomGUI;
 using VoidManager.Utilities;
+using static ExtraTargetLocks.BepinPlugin;
 using static UnityEngine.GUILayout;
 
 namespace ExtraTargetLocks
@@ -9,7 +10,7 @@ namespace ExtraTargetLocks
     {
         public override string Name()
         {
-            return "Extra Target Locks: " + BepinPlugin.Bindings.CachedMaxTargetLocks;
+            return "Extra Target Locks: " + BepinPlugin.Bindings.MaxTargetLocks;
         }
 
         string MTLString = string.Empty;
@@ -18,29 +19,27 @@ namespace ExtraTargetLocks
         {
             if (Game.InGame && !PhotonNetwork.IsMasterClient)
             {
-                Label("Must be host to configure. Current setting: " + BepinPlugin.Bindings.CachedMaxTargetLocks);
+                Label("Must be host to configure. Current setting: " + BepinPlugin.Bindings.MaxTargetLocks);
                 return;
             }
 
             Label("Extra Target Locks");
             MTLString = TextField(MTLString);
 
-            if(int.TryParse(MTLString, out int value) && value >= 4 && value <= 26)
+            if(int.TryParse(MTLString, out int value) && value >= 4 && value <= Bindings.AbsoluteMaxTargetLocks)
             {
-                if(Button("Apply Setting - Current value: " + BepinPlugin.Bindings.CachedMaxTargetLocks))
+                if(Button("Apply Setting - Current value: " + BepinPlugin.Bindings.MaxTargetLocks))
                 {
-                    BepinPlugin.Bindings.CachedMaxTargetLocks = value;
                     BepinPlugin.Bindings.MaxTargetLocks.Value = value;
                     if(Patches.CurrentUsedTacticalLock != null)
                     {
                         Patches.CurrentUsedTacticalLock.LockLimit = value;
                     }
-                    UpdateCurrentMTLMessage.Instance.SendToOthers();
                 }
             }
             else
             {
-                Label("Cannot Change Setting - Must be a number between 4 and 26.");
+                Label("Cannot Change Setting - Must be a number between 4 and 7.");
             }
         }
 
