@@ -10,7 +10,7 @@ namespace ExtraTargetLocks
     {
         public override string Name()
         {
-            return "Extra Target Locks: " + BepinPlugin.Bindings.MaxTargetLocks;
+            return "Extra Target Locks: " + BepinPlugin.Bindings.MaxTargetLocks.Value;
         }
 
         string MTLString = string.Empty;
