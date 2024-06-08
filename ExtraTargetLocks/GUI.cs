@@ -19,7 +19,7 @@ namespace ExtraTargetLocks
         {
             if (Game.InGame && !PhotonNetwork.IsMasterClient)
             {
-                Label("Must be host to configure. Current setting: " + BepinPlugin.Bindings.MaxTargetLocks);
+                Label("Must be host to configure. Current setting: " + BepinPlugin.Bindings.MaxTargetLocks.Value);
                 return;
             }
 
@@ -28,7 +28,7 @@ namespace ExtraTargetLocks
 
             if(int.TryParse(MTLString, out int value) && value >= 4 && value <= Bindings.AbsoluteMaxTargetLocks)
             {
-                if(Button("Apply Setting - Current value: " + BepinPlugin.Bindings.MaxTargetLocks))
+                if(Button("Apply Setting - Current value: " + BepinPlugin.Bindings.MaxTargetLocks.Value))
                 {
                     BepinPlugin.Bindings.MaxTargetLocks.Value = value;
                     if(Patches.CurrentUsedTacticalLock != null)
