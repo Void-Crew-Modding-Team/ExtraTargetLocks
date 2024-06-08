@@ -78,6 +78,7 @@ namespace ExtraTargetLocks
                 {
                     if (CI.opcode == OpCodes.Ldc_I4_7)
                     {
+                        found = true;
                         CI.opcode = OpCodes.Ldsfld;
                         CI.operand = AccessTools.Field(typeof(BepinPlugin.Bindings), "CachedMaxTargetLocks");
                         break;
