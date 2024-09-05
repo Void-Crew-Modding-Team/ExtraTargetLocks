@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ExtraTargetLocks
 {
-    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.USERS_PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Void Crew.exe")]
-    [BepInDependency("VoidManager")]
+    [BepInDependency(VoidManager.MyPluginInfo.PLUGIN_GUID)]
     public class BepinPlugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -22,7 +22,7 @@ namespace ExtraTargetLocks
             Bindings.CachedMaxTargetLocks = Bindings.MaxTargetLocks.Value;
 
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
-            Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+            Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
 
         internal class Bindings

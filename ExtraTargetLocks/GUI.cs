@@ -9,7 +9,7 @@ namespace ExtraTargetLocks
     {
         public override string Name()
         {
-            return "Extra Target Locks: " + BepinPlugin.Bindings.CachedMaxTargetLocks;
+            return $"{MyPluginInfo.USERS_PLUGIN_NAME}: " + BepinPlugin.Bindings.CachedMaxTargetLocks;
         }
 
         string MTLString = string.Empty;

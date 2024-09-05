@@ -19,8 +19,10 @@ namespace ExtraTargetLocks
 
         public override MultiplayerType MPType => MultiplayerType.All;
 
-        public override string Author => "Dragon";
+        public override string Author => MyPluginInfo.PLUGIN_AUTHORS;
 
-        public override string Description => "Increases max target locks. All must have.";
+        public override string Description => MyPluginInfo.PLUGIN_DESCRIPTION;
+
+        public override string ThunderstoreID => MyPluginInfo.PLUGIN_THUNDERSTORE_ID;
     }
 }
