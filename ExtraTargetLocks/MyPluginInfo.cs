@@ -10,6 +10,6 @@ namespace ExtraTargetLocks
         public const string PLUGIN_DESCRIPTION = "Increases max target locks. All must have.";
         public const string PLUGIN_ORIGINAL_AUTHOR = "Dragon";
         public const string PLUGIN_AUTHORS = "Dragon";
-        public const string PLUGIN_THUNDERSTORE_ID = "VoidCrewModdingTeam/ExtraTargetLocks";
+        public const string PLUGIN_THUNDERSTORE_ID = "VoidCrewModdingTeam/Extra_Target_Locks";
     }
 }
